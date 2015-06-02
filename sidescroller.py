@@ -31,14 +31,6 @@ class Player(pygame.sprite.Sprite):
         self.level = level
         self.set_position(level.player_start_x, level.player_start_y)
 
-    """
-    def set_image(self, filename = None):
-        if filename != None:
-            self.image = pygame.image.load(filename).convert()
-            self.image = pygame.transform.scale(self.image,(self.width,self.height))
-            self.set_properties()
-    """
-
     def update(self, collidable=pygame.sprite.Group(), event = None):
         self.experience_gravity()
         self.rect.x += self.hspeed
@@ -176,9 +168,6 @@ if (__name__ == "__main__"):
         clock.tick(frames_per_second)
         # Update
         pygame.display.update()
-
-
-    #window.blit(message, ( window_width - message.get_rect().width, 20))
 
     pygame.quit()
 
