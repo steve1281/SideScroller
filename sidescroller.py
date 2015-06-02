@@ -102,6 +102,8 @@ class Level(object):
         self.world_shift_y = 0
         self.left_viewbox = window_width//2 - window_width/8
         self.right_viewbox = window_width//2 - window_width/10
+        self.up_viewbox = window_height/4
+        self.down_viewbox = window_height/2 + window_height/12
 
     def update(self):
         self.object_list.update()
@@ -110,20 +112,31 @@ class Level(object):
         window.fill(white)
         self.object_list.draw(window)
 
-    def shift_world(self, shift_x):
+    def shift_world(self, shift_x, shift_y):
         self.world_shift_x += shift_x
+        self.world_shift_y += shift_y
+
         for each_object in self.object_list:
             each_object.rect.x += shift_x
+            each_object.rect.y += shift_y
 
     def run_viewbox(self):
         if self.player_object.rect.x <= self.left_viewbox:
             view_difference  = self.left_viewbox - self.player_object.rect.x
             self.player_object.rect.x = self.left_viewbox
-            self.shift_world(view_difference)
+            self.shift_world(view_difference, 0)
         if self.player_object.rect.x > self.right_viewbox:
             view_difference  = self.right_viewbox - self.player_object.rect.x
             self.player_object.rect.x = self.right_viewbox
-            self.shift_world(view_difference)
+            self.shift_world(view_difference, 0)
+        if self.player_object.rect.y <= self.up_viewbox:
+            view_difference  = self.up_viewbox - self.player_object.rect.y
+            self.player_object.rect.y = self.up_viewbox
+            self.shift_world(0, view_difference)
+        if self.player_object.rect.y >  self.down_viewbox:
+            view_difference  = self.down_viewbox - self.player_object.rect.y
+            self.player_object.rect.y = self.down_viewbox
+            self.shift_world(0, view_difference)
 
 
 class Level_01( Level):
