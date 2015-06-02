@@ -98,6 +98,10 @@ class Level(object):
         self.object_list = pygame.sprite.Group()
         self.player_object = player_object
         self.player_start = self.player_start_x, self.player_start_y = 0, 0
+        self.world_shift_x = 0
+        self.world_shift_y = 0
+        self.left_viewbox = window_width//2 - window_width/8
+        self.right_viewbox = window_width//2 - window_width/10
 
     def update(self):
         self.object_list.update()
@@ -105,6 +109,22 @@ class Level(object):
     def draw(self, window):
         window.fill(white)
         self.object_list.draw(window)
+
+    def shift_world(self, shift_x):
+        self.world_shift_x += shift_x
+        for each_object in self.object_list:
+            each_object.rect.x += shift_x
+
+    def run_viewbox(self):
+        if self.player_object.rect.x <= self.left_viewbox:
+            view_difference  = self.left_viewbox - self.player_object.rect.x
+            self.player_object.rect.x = self.left_viewbox
+            self.shift_world(view_difference)
+        if self.player_object.rect.x > self.right_viewbox:
+            view_difference  = self.right_viewbox - self.player_object.rect.x
+            self.player_object.rect.x = self.right_viewbox
+            self.shift_world(view_difference)
+
 
 class Level_01( Level):
     def __init__(self,player_object):
@@ -130,7 +150,7 @@ if (__name__ == "__main__"):
     window_size = window_width, window_height = 640, 480
 
     window = pygame.display.set_mode(window_size, pygame.RESIZABLE )
-    pygame.display.set_caption("SideScroller")
+    pygame.display.set_caption("Side Scroller")
 
     clock = pygame.time.Clock()
     frames_per_second = 60
@@ -160,7 +180,7 @@ if (__name__ == "__main__"):
         current_level.update()
 
         # Logic Testing
-
+        current_level.run_viewbox()
         # Draw
         current_level.draw(window)
         active_object_list.draw(window)
