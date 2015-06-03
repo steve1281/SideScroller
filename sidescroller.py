@@ -142,16 +142,23 @@ class Level(object):
 class Level_01( Level):
     def __init__(self,player_object):
         super(Level_01, self).__init__(player_object)
-        self.player_start = self.player_start_x, self.player_start_y = 40, 40
+        self.player_start = self.player_start_x, self.player_start_y = 100, 100
 
         level = [
-                # [x, y, width, height, color ]
-                [2,134,365,7,black],
-                [200,334,365,7,black],
-                [0,0,window_width,2,red],
-                [0,window_height,window_width,2,red],
-                [0,0,2,window_height,2,green],
-                [window_width,0,2,window_height,2,green],
+	    [16, 15, 1178, 20, black],
+	    [17, 15, 23, 971, black],
+	    [18, 966, 1172, 20, black],
+	    [1173, 33, 21, 948, black],
+	    [39, 133, 354, 28, black],
+	    [407, 237, 417, 32, black],
+	    [849, 130, 327, 31, black],
+	    [110, 440, 279, 25, black],
+	    [550, 440, 325, 24, black],
+	    [1044, 434, 134, 25, black],
+	    [278, 588, 348, 34, black],
+	    [811, 595, 284, 28, black],
+	    [39, 742, 248, 28, black],
+	    [473, 738, 704, 30, black],
         ]
         for block in level:
             block = Block( block[0], block[1], block[2], block[3], block[4])
