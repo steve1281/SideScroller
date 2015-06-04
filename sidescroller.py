@@ -212,11 +212,13 @@ if (__name__ == "__main__"):
     active_object_list.add(player)
 
     level_list = []
+    level_list.append(Level_01(player))
     level_list.append(Level_02(player))
-    current_level_number = 0
+    current_level_number = 1
     current_level = level_list[current_level_number]
-    player.set_level(current_level)
+    #player.set_level(current_level)
 
+    player.set_level(current_level)
     running = True
     while running:
         for event in pygame.event.get():
