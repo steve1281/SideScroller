@@ -33,16 +33,19 @@ if  __name__ == "__main__":
                     pos = (sx,sy)
                     draw_start_box = True
             elif event.type == pygame.MOUSEBUTTONUP:
-                rpos = mouse_pos
-                sx = math.floor(rpos[0]/10)*10
-                sy = math.floor(rpos[1]/10)*10
-                final_pos = (sx,sy)
+	        if event.button == 3:
+		    event = None
+		else:
+                    rpos = mouse_pos
+                    sx = math.floor(rpos[0]/10)*10
+                    sy = math.floor(rpos[1]/10)*10
+                    final_pos = (sx,sy)
 
-                #final_pos = mouse_pos
-                draw_start_box = False
-                r = pygame.Rect(pos, (final_pos[0]-pos[0], final_pos[1]-pos[1]))
-                r.normalize()
-                to_draw += [r]
+                    #final_pos = mouse_pos
+                    draw_start_box = False
+                    r = pygame.Rect(pos, (final_pos[0]-pos[0], final_pos[1]-pos[1]))
+                    r.normalize()
+                    to_draw += [r]
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
