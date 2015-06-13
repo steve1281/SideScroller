@@ -49,8 +49,12 @@ if  __name__ == "__main__":
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    target = open("level.dat",'w')
                     for platform in to_draw:
-                        print "["+str(platform).split("(")[1].split(")")[0]+", black],"
+                        target.write("["+str(platform).split("(")[1].split(")")[0]+", black],\n")
+                    target.close()
+                    print "level written to level.dat"
+
                 if event.key == pygame.K_BACKSPACE:
                     if len(to_draw):
                         to_draw.pop()

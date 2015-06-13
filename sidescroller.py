@@ -138,6 +138,38 @@ class Level(object):
             self.player_object.rect.y = self.down_viewbox
             self.shift_world(0, view_difference)
 
+class Level_03( Level):
+    def __init__(self, player_object):
+        super(Level_03, self).__init__(player_object)
+        self.player_start = self.player_start_x, self.player_start_y = 91, 68
+        level = [
+            [80, 100, 0, 0, black],
+            [10, 10, 1180, 30, black],
+            [10, 40, 30, 780, black],
+            [30, 790, 1140, 30, black],
+            [1160, 40, 30, 780, black],
+            [70, 100, 130, 30, black],
+            [170, 120, 100, 30, black],
+            [250, 150, 110, 30, black],
+            [320, 170, 120, 40, black],
+            [80, 270, 350, 30, black],
+            [90, 380, 340, 20, black],
+            [110, 470, 480, 10, black],
+            [220, 590, 430, 20, black],
+            [650, 130, 20, 480, black],
+            [660, 220, 150, 20, black],
+            [820, 330, 180, 40, black],
+            [960, 500, 160, 40, black],
+            [790, 600, 170, 40, black],
+            [930, 700, 160, 30, black],
+            [310, 730, 200, 20, black],
+            [990, 140, 170, 30, black],
+        ]
+        for block in level:
+            block = Block( block[0], block[1], block[2], block[3], block[4])
+            self.object_list.add(block)
+
+
 class Level_02( Level):
     def __init__(self, player_object):
         super(Level_02, self).__init__(player_object)
@@ -214,7 +246,8 @@ if (__name__ == "__main__"):
     level_list = []
     level_list.append(Level_01(player))
     level_list.append(Level_02(player))
-    current_level_number = 1
+    level_list.append(Level_03(player))
+    current_level_number = 2
     current_level = level_list[current_level_number]
     #player.set_level(current_level)
 
