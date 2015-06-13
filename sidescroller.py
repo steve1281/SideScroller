@@ -143,7 +143,6 @@ class Level_03( Level):
         super(Level_03, self).__init__(player_object)
         self.player_start = self.player_start_x, self.player_start_y = 91, 68
         level = [
-            [80, 100, 0, 0, black],
             [10, 10, 1180, 30, black],
             [10, 40, 30, 780, black],
             [30, 790, 1140, 30, black],
@@ -154,7 +153,7 @@ class Level_03( Level):
             [320, 170, 120, 40, black],
             [80, 270, 350, 30, black],
             [90, 380, 340, 20, black],
-            [110, 470, 480, 10, black],
+            [110, 470, 480, 20, black],
             [220, 590, 430, 20, black],
             [650, 130, 20, 480, black],
             [660, 220, 150, 20, black],
@@ -163,7 +162,7 @@ class Level_03( Level):
             [790, 600, 170, 40, black],
             [930, 700, 160, 30, black],
             [310, 730, 200, 20, black],
-            [990, 140, 170, 30, black],
+            [980, 140, 180, 30, black],
         ]
         for block in level:
             block = Block( block[0], block[1], block[2], block[3], block[4])
