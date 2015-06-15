@@ -21,7 +21,7 @@ class LevelBuilder:
         except getopt.GetoptError:
             print 'levelbuilder.py -f <levelfile> -l <levelname>'
             sys.exit(2)
-
+        # -l, -f, -h
         for opt, arg in opts:
             if opt == '-h':
                 print 'levelbuilder.py -f <levelfile>'
@@ -30,6 +30,7 @@ class LevelBuilder:
                 filename = arg
             elif opt in ("-l", "--levelname"):
                 levelname = arg
+
         # if the filename was not set, abort
         if filename == "":
             print "levelbuilder.py -f <levelfile>"
@@ -53,6 +54,7 @@ class LevelBuilder:
         data.setdefault('playerstart', (0,0))
         data.setdefault('key', (0,0))
         data.setdefault('exit' ,(0,0))
+        # set members
         self.data=data
         self.filename = filename
         self.levelname = levelname
