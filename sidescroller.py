@@ -138,6 +138,29 @@ class Level(object):
             self.player_object.rect.y = self.down_viewbox
             self.shift_world(0, view_difference)
 
+class Level_File( Level ):
+    def __init__(self, player_object, filename):
+        super(Level_File, self).__init__(player_object)
+        load(filename)
+        self.player_start = self.player_start_x, self.player_start_y = self.data['playerstart'][0], self.data['playerstart'][1]
+        level = self.data['blocks']
+        for block in level:
+            block = Block( block[0], block[1], block[2], block[3], block[4])
+            self.object_list.add(block)
+
+    def load(self, filename):
+        """ Read in level file 
+        """
+        try:
+            with open(filename) as data_file:
+                data = json.load(data_file)
+            print "Using %s." % filename
+        except IOError:
+            print "Error: %s was not found." % filename
+            sys.exit(2)
+
+
+
 class Level_03( Level):
     def __init__(self, player_object):
         super(Level_03, self).__init__(player_object)
