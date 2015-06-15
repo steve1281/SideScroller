@@ -49,9 +49,9 @@ class LevelBuilder:
         # this will add it in with a default
         data.setdefault('meta',{}).setdefault('version', 0)
         data.setdefault('meta',{}).setdefault('levelname', "levelname")
-        data.setdefault('blocks',[(10,20,30,40)])
+        data.setdefault('blocks',[])
         data.setdefault('playerstart', (0,0))
-        data.setdefault('keys', [(0,0)])
+        data.setdefault('key', (0,0))
         data.setdefault('exit' ,(0,0))
         self.data=data
         self.filename = filename
@@ -75,6 +75,10 @@ class LevelBuilder:
 
     def main(self):
         self.load(sys.argv[1:])
+        to_draw = []
+        for r in self.data['blocks']:
+            to_draw.append(pygame.Rect((r[0],r[1]),(r[2], r[3])))
+
         pygame.init()
 
         size = width, height = 1200, 1000
@@ -84,7 +88,6 @@ class LevelBuilder:
         window.fill(white)
 
         pygame.display.update()
-        to_draw = []
         # to_draw = [line.strip() for line in open('level4.dat', 'r')]
         # print to_draw
 
@@ -99,7 +102,7 @@ class LevelBuilder:
                     mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 3:
-                        print pygame.mouse.get_pos()
+                        self.data['playerstart'] = pygame.mouse.get_pos()
                         event = None
                     else:
                         rpos = mouse_pos
@@ -126,14 +129,19 @@ class LevelBuilder:
                     if event.key == pygame.K_RETURN:
                         temp = []
                         for platform in to_draw:
-                            print "["+str(platform).split("(")[1].split(")")[0]+", black],\n"
-                            temp.append((platform.top,platform.left,platform.width, platform.height,'black'))
+                            temp.append((platform.left,platform.top,platform.width, platform.height,'black'))
                         self.data['blocks'] = temp
                         self.save()
 
                     if event.key == pygame.K_BACKSPACE:
                         if len(to_draw):
                             to_draw.pop()
+                    if event.key == pygame.K_e:
+                         pos = pygame.mouse.get_pos()
+                         self.data['exit'] = pos
+                    if event.key == pygame.K_k:
+                         pos = pygame.mouse.get_pos()
+                         self.data['key'] = pos
 
             window.fill(white)
             if (draw_start_box):
@@ -141,6 +149,15 @@ class LevelBuilder:
 
             for item in to_draw:
                 pygame.draw.rect(window, black, item)
+
+            if self.data['playerstart']:
+                pygame.draw.circle(window, blue, (self.data['playerstart'][0], self.data['playerstart'][1]),20)
+
+            if self.data['exit']:
+                pygame.draw.circle(window, green, (self.data['exit'][0], self.data['exit'][1]),20)
+
+            if self.data['key']:
+                pygame.draw.circle(window, yellow, (self.data['key'][0], self.data['key'][1]),20)
 
             pygame.display.update()
             clock.tick(fps)
