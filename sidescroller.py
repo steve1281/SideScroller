@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-
-
+import sys
 import pygame
 import json
+import getopt
+
 from colors import *
 from player import Player
 from levelloader import LevelFile
@@ -12,6 +13,23 @@ from properties import (window_width, window_height)
 
 
 if (__name__ == "__main__"):
+    levelnumber = -1
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],"hl:","level=")
+    except getopt.GetoptError:
+        print 'levelbuilder.py -l <levelnumber>'
+        sys.exit(2)
+    # -l
+    for opt, arg in opts:
+        if opt == '-h':
+            print 'levelbuilder.py -l <levelnumber>'
+            sys.exit()
+        elif opt in ("-l", "--level"):
+            levelnumber = int(arg)
+
+    if levelnumber == -1:
+        levelnumber = 0
+
     pygame.init()
     window_size = window_width, window_height #= 640, 480
 
@@ -30,7 +48,7 @@ if (__name__ == "__main__"):
     level_list.append(LevelFile(player, 'data/level02.dat'))
     level_list.append(LevelFile(player, 'data/level03.dat'))
     level_list.append(LevelFile(player, 'data/level04.dat'))
-    current_level_number = 0
+    current_level_number = levelnumber
     current_level = level_list[current_level_number]
     #player.set_level(current_level)
 
