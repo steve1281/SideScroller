@@ -48,6 +48,7 @@ if (__name__ == "__main__"):
     level_list.append(LevelFile(player, 'data/level02.dat'))
     level_list.append(LevelFile(player, 'data/level03.dat'))
     level_list.append(LevelFile(player, 'data/level04.dat'))
+    level_list.append(LevelFile(player, 'data/level05.dat'))
     current_level_number = levelnumber
     current_level = level_list[current_level_number]
     #player.set_level(current_level)
