@@ -32,6 +32,13 @@ class Player(pygame.sprite.Sprite):
         self.set_position(level.player_start_x, level.player_start_y)
         self.hspeed = 0
         self.vspeed = 0
+    
+    def did_escape(self, collidable=pygame.sprite.Group(), event = None):
+        collision_list = pygame.sprite.spritecollide(self, collidable, False)
+        if collision_list:
+            return True
+        else:
+            return False 
 
     def update(self, collidable=pygame.sprite.Group(), event = None):
         self.experience_gravity()

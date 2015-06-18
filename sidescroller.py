@@ -4,8 +4,7 @@ import pygame
 import getopt
 from player import Player
 from levelloader import LevelFile
-from properties import window_width, window_height, MAXLEVEL
-
+from properties import window_width, window_height, MAXLEVEL, frames_per_second
 
 class Game():
 
@@ -15,17 +14,13 @@ class Game():
 
     def init_game(self):
         pygame.init()
-        self.window_size = window_width, window_height #= 640, 480
-
+        self.window_size = window_width, window_height 
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE )
-
         self.clock = pygame.time.Clock()
-        self.frames_per_second = 60
-
+        self.frames_per_second = frames_per_second
         self.active_object_list = pygame.sprite.Group()
         self.player = Player()
         self.active_object_list.add(self.player)
-        
         self.change_to_level(self.levelnumber)
 
     def change_to_level(self, levelnumber):
@@ -45,16 +40,16 @@ class Game():
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
                     if event.key == pygame.K_SPACE:
-                        
                         self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
                         self.change_to_level(self.current_level_number)
 
-                        #self.current_level = LevelFile(self.player, 'data/level0' \
-                        #    +str(self.current_level_number)+".dat")
-                        #self.player.set_level(self.current_level)
-
             # Update functions
             self.player.update(self.current_level.object_list, event)
+            if self.player.did_escape(self.current_level.exit_list, event):
+                self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
+                self.change_to_level(self.current_level_number)
+                
+
             event = None
             self.current_level.update()
 
@@ -84,7 +79,6 @@ class Game():
                 sys.exit()
             elif opt in ("-l", "--level"):
                 self.levelnumber = int(arg)
-
         if self.levelnumber == -1:
             self.levelnumber = 0
 
