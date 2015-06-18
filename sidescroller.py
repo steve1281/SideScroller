@@ -9,7 +9,7 @@ from player import Player
 from levelloader import LevelFile
 from block import Block
 
-from properties import (window_width, window_height)
+from properties import (window_width, window_height, MAXLEVEL)
 
 
 if (__name__ == "__main__"):
@@ -43,16 +43,8 @@ if (__name__ == "__main__"):
     player = Player()
     active_object_list.add(player)
 
-    level_list = []
-    level_list.append(LevelFile(player, 'data/level01.dat'))
-    level_list.append(LevelFile(player, 'data/level02.dat'))
-    level_list.append(LevelFile(player, 'data/level03.dat'))
-    level_list.append(LevelFile(player, 'data/level04.dat'))
-    level_list.append(LevelFile(player, 'data/level05.dat'))
     current_level_number = levelnumber
-    current_level = level_list[current_level_number]
-    #player.set_level(current_level)
-
+    current_level = LevelFile(player, 'data/level0'+str(levelnumber)+".dat")
     player.set_level(current_level)
     running = True
     while running:
@@ -62,6 +54,11 @@ if (__name__ == "__main__"):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                if event.key == pygame.K_SPACE:
+                    current_level_number =  (current_level_number + 1) % MAXLEVEL
+                    current_level = LevelFile(player, 'data/level0'+str(current_level_number)+".dat")
+                    player.set_level(current_level)
+                    
 
         # Update functions
         player.update(current_level.object_list, event)

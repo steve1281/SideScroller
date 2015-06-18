@@ -30,6 +30,8 @@ class Player(pygame.sprite.Sprite):
     def set_level(self, level):
         self.level = level
         self.set_position(level.player_start_x, level.player_start_y)
+        self.hspeed = 0
+        self.vspeed = 0
 
     def update(self, collidable=pygame.sprite.Group(), event = None):
         self.experience_gravity()

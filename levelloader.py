@@ -10,6 +10,9 @@ from properties import window_width, window_height
 
 class Level(object):
     def __init__(self, player_object):
+        self.init_viewbox(player_object)
+
+    def init_viewbox(self, player_object):
         self.object_list = pygame.sprite.Group()
         self.player_object = player_object
         self.player_start = self.player_start_x, self.player_start_y = 0, 0
@@ -69,7 +72,6 @@ class LevelFile( Level ):
         try:
             with open(filename) as data_file:
                 self.data = json.load(data_file)
-            print "Using %s." % filename
         except IOError:
             print "Error: %s was not found." % filename
             sys.exit(2)
