@@ -65,6 +65,9 @@ class LevelFile( Level ):
         for block in level:
             block = Block( block[0], block[1], block[2], block[3], black )
             self.object_list.add(block)
+    
+    def get_level_name(self):
+        return self.data['meta']['levelname']
 
     def load(self, filename):
         """ Read in level file 

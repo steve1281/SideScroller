@@ -18,7 +18,6 @@ class Game():
         self.window_size = window_width, window_height #= 640, 480
 
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE )
-        pygame.display.set_caption("Side Scroller")
 
         self.clock = pygame.time.Clock()
         self.frames_per_second = 60
@@ -26,10 +25,15 @@ class Game():
         self.active_object_list = pygame.sprite.Group()
         self.player = Player()
         self.active_object_list.add(self.player)
+        
+        self.change_to_level(self.levelnumber)
 
+    def change_to_level(self, levelnumber):
+        self.levelnumber = levelnumber
         self.current_level_number = self.levelnumber
         self.current_level = LevelFile(self.player, 'data/level0'+str(self.levelnumber)+".dat")
         self.player.set_level(self.current_level)
+        pygame.display.set_caption(self.current_level.get_level_name())
 
     def run(self):
         self.running = True
@@ -41,10 +45,13 @@ class Game():
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
                     if event.key == pygame.K_SPACE:
+                        
                         self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
-                        self.current_level = LevelFile(self.player, 'data/level0' \
-                            +str(self.current_level_number)+".dat")
-                        self.player.set_level(self.current_level)
+                        self.change_to_level(self.current_level_number)
+
+                        #self.current_level = LevelFile(self.player, 'data/level0' \
+                        #    +str(self.current_level_number)+".dat")
+                        #self.player.set_level(self.current_level)
 
             # Update functions
             self.player.update(self.current_level.object_list, event)
