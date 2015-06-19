@@ -31,6 +31,7 @@ class Game():
         pygame.display.set_caption(self.current_level.get_level_name())
 
     def run(self):
+        self.locked = True
         self.running = True
         while self.running:
             for event in pygame.event.get():
@@ -45,9 +46,16 @@ class Game():
 
             # Update functions
             self.player.update(self.current_level.object_list, event)
-            if self.player.did_escape(self.current_level.exit_list, event):
+            # - check for exit collision
+            if self.locked == False and self.player.did_collide(self.current_level.exit_list, event):
                 self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
                 self.change_to_level(self.current_level_number)
+                self.locked = True
+
+            x = self.player.did_collide(self.current_level.key_list, event)
+            if x:
+                self.current_level.key_list = [item for item in self.current_level.key_list if item not in x]
+                self.locked = False
                 
 
             event = None

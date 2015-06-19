@@ -15,6 +15,7 @@ class Level(object):
     def init_viewbox(self, player_object):
         self.object_list = pygame.sprite.Group()
         self.exit_list = pygame.sprite.Group()
+        self.key_list = pygame.sprite.Group()
         self.player_object = player_object
         self.player_start = self.player_start_x, self.player_start_y = 0, 0
         self.world_shift_x = 0
@@ -31,6 +32,8 @@ class Level(object):
         window.fill(white)
         self.object_list.draw(window)
         self.exit_list.draw(window)
+        if self.key_list:
+            self.key_list.draw(window)
 
     def shift_world(self, shift_x, shift_y):
         self.world_shift_x += shift_x
@@ -39,6 +42,9 @@ class Level(object):
             each_object.rect.x += shift_x
             each_object.rect.y += shift_y
         for each_object in self.exit_list:
+            each_object.rect.x += shift_x
+            each_object.rect.y += shift_y
+        for each_object in self.key_list:
             each_object.rect.x += shift_x
             each_object.rect.y += shift_y
 
@@ -73,6 +79,8 @@ class LevelFile( Level ):
             self.object_list.add(block)
         block = Block( self.data['exit'][0], self.data['exit'][1]-25, 30, 50, red)
         self.exit_list.add(block)
+        block = Block( self.data['key'][0], self.data['key'][1]-25, 30, 50, yellow)
+        self.key_list.add(block)
     
     def get_level_name(self):
         return self.data['meta']['levelname']
