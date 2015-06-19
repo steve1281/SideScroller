@@ -77,10 +77,16 @@ class LevelFile( Level ):
         for block in level:
             block = Block( block[0], block[1], block[2], block[3], black )
             self.object_list.add(block)
-        block = Block( self.data['exit'][0], self.data['exit'][1]-25, 30, 50, red)
-        self.exit_list.add(block)
-        block = Block( self.data['key'][0], self.data['key'][1]-25, 30, 50, yellow)
-        self.key_list.add(block)
+
+        b = pygame.sprite.Sprite() # create sprite
+        b.image = pygame.transform.scale(pygame.image.load("sprites/exit.gif"),(30, 50))
+        b.rect  = pygame.Rect(self.data['exit'][0], self.data['exit'][1]-25, 30, 50)
+        self.exit_list.add(b)
+
+        b = pygame.sprite.Sprite() # create sprite
+        b.image = pygame.transform.scale(pygame.image.load("sprites/key.gif"),(30, 50))
+        b.rect  = pygame.Rect(self.data['key'][0], self.data['key'][1]-25, 30, 50)
+        self.key_list.add(b)
     
     def get_level_name(self):
         return self.data['meta']['levelname']
