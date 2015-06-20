@@ -6,11 +6,16 @@ import json
 from colors import *
 from player import Player
 from block import Block
+from imagefactory import ImageFactory
 from properties import window_width, window_height
 
 class Level(object):
     def __init__(self, player_object):
         self.init_viewbox(player_object)
+        self.imageFactory = ImageFactory()
+
+    def reset(self):
+        pass
 
     def init_viewbox(self, player_object):
         self.object_list = pygame.sprite.Group()
@@ -79,12 +84,12 @@ class LevelFile( Level ):
             self.object_list.add(block)
 
         b = pygame.sprite.Sprite() # create sprite
-        b.image = pygame.transform.scale(pygame.image.load("sprites/exit.gif"),(30, 50))
+        b.image = self.imageFactory.getImage("exit") 
         b.rect  = pygame.Rect(self.data['exit'][0], self.data['exit'][1]-25, 30, 50)
         self.exit_list.add(b)
 
         b = pygame.sprite.Sprite() # create sprite
-        b.image = pygame.transform.scale(pygame.image.load("sprites/key.gif"),(30, 50))
+        b.image = self.imageFactory.getImage("key")
         b.rect  = pygame.Rect(self.data['key'][0], self.data['key'][1]-25, 30, 50)
         self.key_list.add(b)
     

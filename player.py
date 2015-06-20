@@ -3,9 +3,11 @@
 
 import pygame
 from colors import *
+from imagefactory import ImageFactory
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, color=blue, width=32, height=48):
+        self.images = ImageFactory()
         self.width = width
         self.height = height
         super(Player, self).__init__()
@@ -21,24 +23,23 @@ class Player(pygame.sprite.Sprite):
 
     def set_custome(self):
         # determine current direction
-        direction = "standing.gif"
+        direction = "standing"
         if self.vspeed > 0:
-            direction = "up.gif"
+            direction = "up"
         elif self.vspeed < 0:
-            direction = "down.gif"
+            direction = "down"
         elif self.vspeed == 0:
             if self.hspeed > 0:
-                direction = "run_right.gif"
+                direction = "right"
             elif self.hspeed < 0:
-                direction = "run_left.gif"
+                direction = "left"
             else:
-                direction = "standing.gif"
+                direction = "standing"
         if self.direction == direction:
             pass
         else:
             self.direction = direction
-            self.image = pygame.transform.scale(pygame.image.load("sprites/"+direction),(30, 50))
-
+            self.image = self.images.getImage(direction)
 
     def set_properties(self):
         self.rect = self.image.get_rect()

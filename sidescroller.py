@@ -5,6 +5,7 @@ import getopt
 from player import Player
 from levelloader import LevelFile
 from properties import window_width, window_height, MAXLEVEL, frames_per_second
+from levelfactory import LevelFactory
 
 class Game():
 
@@ -20,13 +21,15 @@ class Game():
         self.frames_per_second = frames_per_second
         self.active_object_list = pygame.sprite.Group()
         self.player = Player()
+        self.levels = LevelFactory(self.player)
         self.active_object_list.add(self.player)
         self.change_to_level(self.levelnumber)
 
     def change_to_level(self, levelnumber):
         self.levelnumber = levelnumber
         self.current_level_number = self.levelnumber
-        self.current_level = LevelFile(self.player, 'data/level0'+str(self.levelnumber)+".dat")
+        self.current_level = self.levels.getLevel(levelnumber)
+        #  LevelFile(self.player, 'data/level0'+str(self.levelnumber)+".dat")
         self.player.set_level(self.current_level)
         pygame.display.set_caption(self.current_level.get_level_name())
 
@@ -48,15 +51,19 @@ class Game():
             self.player.update(self.current_level.object_list, event)
             # - check for exit collision
             if self.locked == False and self.player.did_collide(self.current_level.exit_list, event):
-                self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
-                self.change_to_level(self.current_level_number)
-                self.locked = True
+                self.current_level_number =  self.current_level_number + 1
+		if self.current_level_number == MAXLEVEL:
+                    print "Game Over, you won!"
+                    self.running = False
+                    continue
+                else:
+                    self.change_to_level(self.current_level_number)
+                    self.locked = True
 
             x = self.player.did_collide(self.current_level.key_list, event)
             if x:
                 self.current_level.key_list = [item for item in self.current_level.key_list if item not in x]
                 self.locked = False
-                
 
             event = None
             self.current_level.update()
