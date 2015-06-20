@@ -9,13 +9,36 @@ class Player(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         super(Player, self).__init__()
-        self.image = pygame.Surface((width, height))
-        self.image.fill( color )
-        self.set_properties()
-        self.rect = self.image.get_rect()
+
+        self.direction = ""
         self.hspeed = 0
         self.vspeed = 0
         self.level = None
+
+        self.set_custome()
+        self.set_properties()
+        self.rect = self.image.get_rect()
+
+    def set_custome(self):
+        # determine current direction
+        direction = "standing.gif"
+        if self.vspeed > 0:
+            direction = "up.gif"
+        elif self.vspeed < 0:
+            direction = "down.gif"
+        elif self.vspeed == 0:
+            if self.hspeed > 0:
+                direction = "run_right.gif"
+            elif self.hspeed < 0:
+                direction = "run_left.gif"
+            else:
+                direction = "standing.gif"
+        if self.direction == direction:
+            pass
+        else:
+            self.direction = direction
+            self.image = pygame.transform.scale(pygame.image.load("sprites/"+direction),(30, 50))
+
 
     def set_properties(self):
         self.rect = self.image.get_rect()
@@ -78,6 +101,7 @@ class Player(pygame.sprite.Sprite):
                 if event.key == pygame.K_RIGHT:
                     if self.hspeed > 0:
                         self.hspeed == 0
+        self.set_custome()
 
     def experience_gravity(self, gravity = .35):
         if self.vspeed == 0:
