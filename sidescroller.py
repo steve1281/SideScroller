@@ -1,20 +1,34 @@
 #!/usr/bin/env python
 import sys
+import time
 import pygame
 import getopt
 from player import Player
 from levelloader import LevelFile
 from properties import window_width, window_height, MAXLEVEL, frames_per_second
 from levelfactory import LevelFactory
+from imagefactory import ImageFactory
+from soundfactory import SoundFactory
+from colors import *
 
 class Game():
 
     def __init__(self):
+
+        pygame.init()
+        pygame.mixer.init()
+        self.images = ImageFactory()
+        self.sounds = SoundFactory()
         self.load_level()
         self.init_game()
+        self.running_intro = False
+        self.running_help = False
+        self.running_game_over = False
+        self.running_game = True
+        self.running = True
 
     def init_game(self):
-        pygame.init()
+
         self.window_size = window_width, window_height 
         self.window = pygame.display.set_mode(self.window_size, pygame.RESIZABLE )
         self.clock = pygame.time.Clock()
@@ -34,44 +48,72 @@ class Game():
 
     def run(self):
         self.locked = True
-        self.running_game = True
-        while self.running_game:
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running_game = False
+                    self.running = False
+                    continue
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.running_game = False
-                    if event.key == pygame.K_SPACE:
+                        self.running = False
+                    if event.key == pygame.K_SPACE and self.running_game:
+                        # todo: remove the space option
                         self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
                         self.change_to_level(self.current_level_number)
+                    if event.key == pygame.K_h and self.running_game:
+                        self.running_game = False
+                        self.running_help = True
+                    if event.key == pygame.K_SPACE and self.running_help:
+                        self.running_game = True
+                        self.running_help = False
+                    if event.key == pygame.K_SPACE and self.running_game_over:
+                        self.running = False
+                        continue
+                  
+            # determine where we are visa-v game state
+            if self.running_game: 
+                # Update functions
+                self.player.update(self.current_level.object_list, event)
+                # - check for exit collision
+                if self.locked == False and self.player.did_collide(\
+                   self.current_level.exit_list, event):
+                    self.sounds.getSound("woosh").play()
+                    self.current_level_number =  self.current_level_number + 1
+		    if self.current_level_number == MAXLEVEL:
+                        self.running_game = False
+                        self.running_game_over = True 
+                        continue
+                    else:
+                        self.change_to_level(self.current_level_number)
+                        self.locked = True
 
-            # Update functions
-            self.player.update(self.current_level.object_list, event)
-            # - check for exit collision
-            if self.locked == False and self.player.did_collide(self.current_level.exit_list, event):
-                self.current_level_number =  self.current_level_number + 1
-		if self.current_level_number == MAXLEVEL:
-                    print "Game Over, you won!"
-                    self.running_game = False
-                    continue
-                else:
-                    self.change_to_level(self.current_level_number)
-                    self.locked = True
+                x = self.player.did_collide(self.current_level.key_list, event)
+                if x:
+                    self.current_level.key_list = \
+                        [item for item in self.current_level.key_list if item not in x]
+                    self.locked = False
+                    sounda = self.sounds.getSound("glass_ding")
+                    sounda.play()
 
-            x = self.player.did_collide(self.current_level.key_list, event)
-            if x:
-                self.current_level.key_list = [item for item in self.current_level.key_list if item not in x]
-                self.locked = False
+                event = None
+                self.current_level.update()
 
-            event = None
-            self.current_level.update()
+                # Logic Testing
+                self.current_level.run_viewbox()
+                # Draw
+                self.current_level.draw(self.window)
+                self.active_object_list.draw(self.window)
+            elif self.running_help:
+                self.window.fill(blue)
+                self.window.blit(self.images.getImage('help'),(0,0))
+            elif self.running_intro:
+                pass
+            elif self.running_game_over:
+                self.window.fill(blue)
+                self.window.blit(self.images.getImage('gameover'),(0,0))
+            else:
+                pass
 
-            # Logic Testing
-            self.current_level.run_viewbox()
-            # Draw
-            self.current_level.draw(self.window)
-            self.active_object_list.draw(self.window)
             # Delay
             self.clock.tick(self.frames_per_second)
             # Update

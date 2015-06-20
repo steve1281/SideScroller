@@ -17,4 +17,15 @@ image_list = [ { 'filename': 'sprites/cat.gif',  'name': 'cat' },
                { 'filename': 'sprites/standing.gif', 'name': 'standing' },
                { 'filename': 'sprites/up.gif', 'name': 'up' },
              ]
+help_image = 'help.BMP'
+game_over_image = 'gameover.gif'
+sound_list = [
+              { 'filename': 'sounds/blop.wav', 'name': 'blop'},
+              { 'filename': 'sounds/cat_meow_2.wav', 'name': 'meow'},
+              { 'filename': 'sounds/coin_drop.wav', 'name': 'coin'},
+              { 'filename': 'sounds/glass_ping.wav', 'name': 'glass_ding'},
+              { 'filename': 'sounds/ping_drop.wav', 'name': 'ping_drop'},
+              { 'filename': 'sounds/woosh.wav', 'name': 'woosh'},
+             ]
+
 

@@ -24,9 +24,9 @@ class Player(pygame.sprite.Sprite):
     def set_custome(self):
         # determine current direction
         direction = "standing"
-        if self.vspeed > 0:
+        if self.vspeed < 0:
             direction = "up"
-        elif self.vspeed < 0:
+        elif self.vspeed > 0:
             direction = "down"
         elif self.vspeed == 0:
             if self.hspeed > 0:
