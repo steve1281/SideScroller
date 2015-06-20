@@ -29,20 +29,19 @@ class Game():
         self.levelnumber = levelnumber
         self.current_level_number = self.levelnumber
         self.current_level = self.levels.getLevel(levelnumber)
-        #  LevelFile(self.player, 'data/level0'+str(self.levelnumber)+".dat")
         self.player.set_level(self.current_level)
         pygame.display.set_caption(self.current_level.get_level_name())
 
     def run(self):
         self.locked = True
-        self.running = True
-        while self.running:
+        self.running_game = True
+        while self.running_game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    self.running_game = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        self.running = False
+                        self.running_game = False
                     if event.key == pygame.K_SPACE:
                         self.current_level_number =  (self.current_level_number + 1) % MAXLEVEL
                         self.change_to_level(self.current_level_number)
@@ -54,7 +53,7 @@ class Game():
                 self.current_level_number =  self.current_level_number + 1
 		if self.current_level_number == MAXLEVEL:
                     print "Game Over, you won!"
-                    self.running = False
+                    self.running_game = False
                     continue
                 else:
                     self.change_to_level(self.current_level_number)
