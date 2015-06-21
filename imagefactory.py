@@ -8,7 +8,7 @@ class ImageFactory():
     def __init__(self):
        self.images = {} 
        for i in image_list:
-           self.images[i['name']] = self.makeImage(i['filename'],30, 50)
+           self.images[i['name']] = self.makeImage(i['filename'],i['x'], i['y'])
        self.images['help'] = self.makeImage(help_image, 640, 400)
        self.images['gameover'] = self.makeImage(game_over_image, 640, 400)
 

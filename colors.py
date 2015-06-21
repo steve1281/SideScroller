@@ -9,3 +9,6 @@ red = pygame.Color(255, 0, 0)
 blue = pygame.Color(0, 0, 255)
 green = pygame.Color(0, 255, 0)
 yellow = pygame.Color(255, 255, 0)
+purple = pygame.Color(221,160,221)
+
+

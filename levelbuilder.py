@@ -54,6 +54,7 @@ class LevelBuilder:
         data.setdefault('playerstart', (0,0))
         data.setdefault('key', (0,0))
         data.setdefault('exit' ,(0,0))
+        data.setdefault('cat' ,(0,0))
         # set members
         self.data=data
         self.filename = filename
@@ -88,17 +89,16 @@ class LevelBuilder:
         clock = pygame.time.Clock()
         fps = 60
         window.fill(white)
-
         pygame.display.update()
-        # to_draw = [line.strip() for line in open('level4.dat', 'r')]
-        # print to_draw
 
         draw_start_box = False
 
         running = True
         while running:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                if event.type == pygame.QUIT or \
+                   event.type == pygame.KEYDOWN and \
+                   event.key == pygame.K_ESCAPE:
                     running = False
                 elif (event.type == pygame.MOUSEMOTION):
                     mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -111,7 +111,12 @@ class LevelBuilder:
                         sx = math.floor(rpos[0]/10)*10
                         sy = math.floor(rpos[1]/10)*10
                         pos = (sx,sy)
-                        draw_start_box = True
+                        for item in to_draw:
+                            if item.collidepoint(pos):
+                                pygame.draw.rect(window, red, item)
+                            else:
+                                pygame.draw.rect(window, black, item)
+                                draw_start_box = True
                 elif event.type == pygame.MOUSEBUTTONUP:
 	            if event.button == 3:
 		        event = None
@@ -131,7 +136,8 @@ class LevelBuilder:
                     if event.key == pygame.K_RETURN:
                         temp = []
                         for platform in to_draw:
-                            temp.append((platform.left,platform.top,platform.width, platform.height,'black'))
+                            temp.append((platform.left,platform.top,platform.width,\
+                               platform.height,'black'))
                         self.data['blocks'] = temp
                         self.save()
 
@@ -144,22 +150,33 @@ class LevelBuilder:
                     if event.key == pygame.K_k:
                          pos = pygame.mouse.get_pos()
                          self.data['key'] = pos
+                    if event.key == pygame.K_c:
+                         pos = pygame.mouse.get_pos()
+                         self.data['cat'] = pos
 
             window.fill(white)
             if (draw_start_box):
-                pygame.draw.rect(window, red, pygame.Rect(pos, (mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])))
+                pygame.draw.rect(window, red, pygame.Rect(pos, \
+                   (mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])))
 
             for item in to_draw:
                 pygame.draw.rect(window, black, item)
 
             if self.data['playerstart']:
-                pygame.draw.circle(window, blue, (self.data['playerstart'][0], self.data['playerstart'][1]),20)
+                pygame.draw.circle(window, blue, (self.data['playerstart'][0],\
+                    self.data['playerstart'][1]),20)
 
             if self.data['exit']:
-                pygame.draw.circle(window, green, (self.data['exit'][0], self.data['exit'][1]),20)
+                pygame.draw.circle(window, green, (self.data['exit'][0], \
+                    self.data['exit'][1]),20)
 
             if self.data['key']:
-                pygame.draw.circle(window, yellow, (self.data['key'][0], self.data['key'][1]),20)
+                pygame.draw.circle(window, yellow, (self.data['key'][0], \
+                    self.data['key'][1]),20)
+
+            if self.data['cat']:
+                pygame.draw.circle(window, purple, (self.data['cat'][0], \
+                    self.data['cat'][1]),20)
 
             pygame.display.update()
             clock.tick(fps)

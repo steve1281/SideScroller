@@ -21,6 +21,7 @@ class Level(object):
         self.object_list = pygame.sprite.Group()
         self.exit_list = pygame.sprite.Group()
         self.key_list = pygame.sprite.Group()
+        self.cat_list = pygame.sprite.Group()
         self.player_object = player_object
         self.player_start = self.player_start_x, self.player_start_y = 0, 0
         self.world_shift_x = 0
@@ -37,6 +38,7 @@ class Level(object):
         window.fill(white)
         self.object_list.draw(window)
         self.exit_list.draw(window)
+        self.cat_list.draw(window)
         if self.key_list:
             self.key_list.draw(window)
 
@@ -50,6 +52,9 @@ class Level(object):
             each_object.rect.x += shift_x
             each_object.rect.y += shift_y
         for each_object in self.key_list:
+            each_object.rect.x += shift_x
+            each_object.rect.y += shift_y
+        for each_object in self.cat_list:
             each_object.rect.x += shift_x
             each_object.rect.y += shift_y
 
@@ -80,7 +85,7 @@ class LevelFile( Level ):
         self.player_start = self.player_start_x, self.player_start_y   
         level = self.data['blocks']
         for block in level:
-            block = Block( block[0], block[1], block[2], block[3], black )
+            block = Block( block[0], block[1], block[2], block[3], self.decode(block[4]) )
             self.object_list.add(block)
 
         b = pygame.sprite.Sprite() # create sprite
@@ -92,6 +97,17 @@ class LevelFile( Level ):
         b.image = self.imageFactory.getImage("key")
         b.rect  = pygame.Rect(self.data['key'][0], self.data['key'][1]-25, 30, 50)
         self.key_list.add(b)
+
+        b = pygame.sprite.Sprite() # create sprite
+        b.image = self.imageFactory.getImage("cat")
+        b.rect  = pygame.Rect(self.data['cat'][0], self.data['cat'][1]-25, 60, 50)
+        self.cat_list.add(b)
+
+    def decode(self, code):
+        if code == "black":
+            return black
+        else:
+            return red
     
     def get_level_name(self):
         return self.data['meta']['levelname']

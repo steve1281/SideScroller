@@ -95,6 +95,10 @@ class Game():
                     sounda = self.sounds.getSound("glass_ding")
                     sounda.play()
 
+                if self.player.did_collide(self.current_level.cat_list, event):
+                    sounda = self.sounds.getSound("meow")
+                    sounda.play()
+
                 event = None
                 self.current_level.update()
 
