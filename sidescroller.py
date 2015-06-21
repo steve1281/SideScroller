@@ -9,12 +9,12 @@ from properties import window_width, window_height, MAXLEVEL, frames_per_second
 from levelfactory import LevelFactory
 from imagefactory import ImageFactory
 from soundfactory import SoundFactory
-from colors import *
+from colors import CMap
 
 class Game():
 
     def __init__(self):
-
+        
         pygame.init()
         pygame.mixer.init()
         self.images = ImageFactory()
@@ -26,6 +26,8 @@ class Game():
         self.running_game_over = False
         self.running_game = True
         self.running = True
+        
+  
 
     def init_game(self):
 
@@ -108,12 +110,12 @@ class Game():
                 self.current_level.draw(self.window)
                 self.active_object_list.draw(self.window)
             elif self.running_help:
-                self.window.fill(blue)
+                self.window.fill(CMap.blue)
                 self.window.blit(self.images.getImage('help'),(0,0))
             elif self.running_intro:
                 pass
             elif self.running_game_over:
-                self.window.fill(blue)
+                self.window.fill(CMap.blue)
                 self.window.blit(self.images.getImage('gameover'),(0,0))
             else:
                 pass

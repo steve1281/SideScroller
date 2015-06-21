@@ -3,11 +3,11 @@
 import sys
 import pygame
 import json
-from colors import *
 from player import Player
 from block import Block
 from imagefactory import ImageFactory
 from properties import window_width, window_height
+from colors import CMap
 
 class Level(object):
     def __init__(self, player_object):
@@ -35,7 +35,7 @@ class Level(object):
         self.object_list.update()
 
     def draw(self, window):
-        window.fill(white)
+        window.fill(CMap.white)
         self.object_list.draw(window)
         self.exit_list.draw(window)
         self.cat_list.draw(window)
@@ -85,7 +85,7 @@ class LevelFile( Level ):
         self.player_start = self.player_start_x, self.player_start_y   
         level = self.data['blocks']
         for block in level:
-            block = Block( block[0], block[1], block[2], block[3], self.decode(block[4]) )
+            block = Block( block[0], block[1], block[2], block[3], (CMap()).decode(block[4]) )
             self.object_list.add(block)
 
         b = pygame.sprite.Sprite() # create sprite
@@ -103,14 +103,6 @@ class LevelFile( Level ):
         b.rect  = pygame.Rect(self.data['cat'][0], self.data['cat'][1]-25, 60, 50)
         self.cat_list.add(b)
 
-    def decode(self, code):
-        if code == "black":
-            return black
-        elif code == "green":
-            return green
-        else:
-            return red
-    
     def get_level_name(self):
         return self.data['meta']['levelname']
 

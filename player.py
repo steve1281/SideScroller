@@ -2,11 +2,11 @@
 
 
 import pygame
-from colors import *
+from colors import CMap
 from imagefactory import ImageFactory
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, color=blue, width=32, height=48):
+    def __init__(self, color=CMap.blue, width=32, height=48):
         self.images = ImageFactory()
         self.width = width
         self.height = height

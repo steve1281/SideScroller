@@ -6,7 +6,9 @@ import getopt
 import json
 from imagefactory import ImageFactory
 
-from colors import *
+from colors import CMap
+
+
 
 class LevelBuilder:
     def __init__(self):
@@ -89,7 +91,7 @@ class LevelBuilder:
         window = pygame.display.set_mode(size)
         clock = pygame.time.Clock()
         fps = 60
-        window.fill(white)
+        window.fill(CMap.white)
         pygame.display.update()
 
         draw_start_box = False
@@ -114,9 +116,9 @@ class LevelBuilder:
                         pos = (sx,sy)
                         for item in to_draw:
                             if item.collidepoint(pos):
-                                pygame.draw.rect(window, red, item)
+                                pygame.draw.rect(window, CMap.red, item)
                             else:
-                                pygame.draw.rect(window, black, item)
+                                pygame.draw.rect(window, CMap.black, item)
                                 draw_start_box = True
                 elif event.type == pygame.MOUSEBUTTONUP:
 	            if event.button == 3:
@@ -158,13 +160,13 @@ class LevelBuilder:
                          pos = pygame.mouse.get_pos()
                          self.data['cat'] = pos
 
-            window.fill(white)
+            window.fill(CMap.white)
             if (draw_start_box):
-                pygame.draw.rect(window, red, pygame.Rect(pos, \
+                pygame.draw.rect(window, CMap.red, pygame.Rect(pos, \
                    (mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])))
 
             for item in to_draw:
-                pygame.draw.rect(window, black, item)
+                pygame.draw.rect(window, CMap.black, item)
 
             if self.data['playerstart']:
                 window.blit( self.images.getImage('standing'), \
@@ -187,7 +189,7 @@ class LevelBuilder:
 
         pygame.quit()
 
-
+        
 if  __name__ == "__main__":
     (LevelBuilder()).main()
 

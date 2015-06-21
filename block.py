@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 import pygame
-from colors import *
+from colors import CMap
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, color=blue):
+    def __init__(self, x, y, width, height, color=CMap.blue):
         self.width = width
         self.height = height
         super(Block, self).__init__()
