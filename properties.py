@@ -4,7 +4,8 @@ window_height = 480
 frames_per_second = 60
 level_file_list = ['data/level00.dat','data/level01.dat',
                    'data/level02.dat','data/level03.dat',
-                   'data/level04.dat','data/level05.dat',]
+                   'data/level04.dat','data/level05.dat',
+                   'data/level06.dat']
 MAXLEVEL = len(level_file_list)
 
 image_list = [ { 'filename': 'sprites/cat.gif',  'name': 'cat', 'x':60, 'y':50 },

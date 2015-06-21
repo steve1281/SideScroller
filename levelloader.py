@@ -106,6 +106,8 @@ class LevelFile( Level ):
     def decode(self, code):
         if code == "black":
             return black
+        elif code == "green":
+            return green
         else:
             return red
     

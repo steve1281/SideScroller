@@ -4,12 +4,13 @@ import pygame
 import sys
 import getopt
 import json
+from imagefactory import ImageFactory
 
 from colors import *
 
 class LevelBuilder:
     def __init__(self):
-        pass
+        self.images = ImageFactory()
 
     def load(self,argv):
         """ load level from a file or throw an error.
@@ -163,20 +164,20 @@ class LevelBuilder:
                 pygame.draw.rect(window, black, item)
 
             if self.data['playerstart']:
-                pygame.draw.circle(window, blue, (self.data['playerstart'][0],\
-                    self.data['playerstart'][1]),20)
+                window.blit( self.images.getImage('standing'), \
+                    (self.data['playerstart'][0], self.data['playerstart'][1] -25))
 
             if self.data['exit']:
-                pygame.draw.circle(window, green, (self.data['exit'][0], \
-                    self.data['exit'][1]),20)
+                window.blit( self.images.getImage('exit'), \
+                    (self.data['exit'][0] , self.data['exit'][1] -25))
 
             if self.data['key']:
-                pygame.draw.circle(window, yellow, (self.data['key'][0], \
-                    self.data['key'][1]),20)
+                window.blit( self.images.getImage('key'), \
+                    (self.data['key'][0] , self.data['key'][1] -25))
 
             if self.data['cat']:
-                pygame.draw.circle(window, purple, (self.data['cat'][0], \
-                    self.data['cat'][1]),20)
+                window.blit( self.images.getImage('cat'), \
+                    (self.data['cat'][0] -30, self.data['cat'][1] -25))
 
             pygame.display.update()
             clock.tick(fps)
