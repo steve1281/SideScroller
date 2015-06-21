@@ -137,8 +137,11 @@ class LevelBuilder:
                     if event.key == pygame.K_RETURN:
                         temp = []
                         for platform in to_draw:
-                            temp.append((platform.left,platform.top,platform.width,\
-                               platform.height,'black'))
+                            if platform.width < 1 and platform.height < 1:
+                                pass
+                            else:
+                               temp.append((platform.left,platform.top,platform.width,\
+                                   platform.height,'black'))
                         self.data['blocks'] = temp
                         self.save()
 
