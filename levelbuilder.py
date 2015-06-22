@@ -118,7 +118,10 @@ class LevelBuilder:
                             item = itemx[0]
                             col = itemx[1]
                             if item.collidepoint(pos):
-                                pygame.draw.rect(window, CMap.red, item)
+                                to_draw = [it for it in to_draw if it != itemx]
+                                to_draw.append((item, current_color))
+                                event = None
+                                break
                             else:
                                 pygame.draw.rect(window, col, item)
                                 draw_start_box = True
