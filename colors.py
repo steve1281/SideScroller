@@ -1,10 +1,7 @@
 import pygame
 
-
-
 class CMap():
-
-
+    # class exposed
     white = pygame.Color(255, 255, 255),
     black = pygame.Color(0, 0, 0),
     gray = pygame.Color(90, 90, 90),
@@ -28,8 +25,14 @@ class CMap():
             'purple' : CMap.purple,
         }
 
-
     def decode(self, code):
         return self.color_map[code]
+
+    def recode(self, col):
+        for m,c in self.color_map.iteritems():
+            if c == col:
+                return m
+        return 'black'
+
 
     

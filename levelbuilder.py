@@ -83,7 +83,7 @@ class LevelBuilder:
         self.load(sys.argv[1:])
         to_draw = []
         for r in self.data['blocks']:
-            to_draw.append(pygame.Rect((r[0],r[1]),(r[2], r[3])))
+            to_draw.append((pygame.Rect((r[0],r[1]),(r[2], r[3])), (CMap()).decode(r[4])))
 
         pygame.init()
 
@@ -95,7 +95,7 @@ class LevelBuilder:
         pygame.display.update()
 
         draw_start_box = False
-
+        current_color = CMap.silver
         running = True
         while running:
             for event in pygame.event.get():
@@ -114,11 +114,13 @@ class LevelBuilder:
                         sx = math.floor(rpos[0]/10)*10
                         sy = math.floor(rpos[1]/10)*10
                         pos = (sx,sy)
-                        for item in to_draw:
+                        for itemx in to_draw:
+                            item = itemx[0]
+                            col = itemx[1]
                             if item.collidepoint(pos):
                                 pygame.draw.rect(window, CMap.red, item)
                             else:
-                                pygame.draw.rect(window, CMap.black, item)
+                                pygame.draw.rect(window, col, item)
                                 draw_start_box = True
                 elif event.type == pygame.MOUSEBUTTONUP:
 	            if event.button == 3:
@@ -133,17 +135,21 @@ class LevelBuilder:
                         draw_start_box = False
                         r = pygame.Rect(pos, (final_pos[0]-pos[0], final_pos[1]-pos[1]))
                         r.normalize()
-                        to_draw += [r]
+                        to_draw.append((r,current_color))
+
+                        
 
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         temp = []
-                        for platform in to_draw:
+                        for p in to_draw:
+                            platform = p[0]
+                            col = p[1]
                             if platform.width < 1 and platform.height < 1:
                                 pass
                             else:
                                temp.append((platform.left,platform.top,platform.width,\
-                                   platform.height,'black'))
+                                   platform.height,(CMap()).recode(col)))
                         self.data['blocks'] = temp
                         self.save()
 
@@ -159,14 +165,34 @@ class LevelBuilder:
                     if event.key == pygame.K_c:
                          pos = pygame.mouse.get_pos()
                          self.data['cat'] = pos
+                    if event.key == pygame.K_0:
+                         current_color = CMap.black
+                    if event.key == pygame.K_1:
+                         current_color = CMap.gray
+                    if event.key == pygame.K_2:
+                         current_color = CMap.silver
+                    if event.key == pygame.K_3:
+                         current_color = CMap.red
+                    if event.key == pygame.K_4:
+                         current_color = CMap.blue
+                    if event.key == pygame.K_5:
+                         current_color = CMap.green
+                    if event.key == pygame.K_6:
+                         current_color = CMap.yellow
+                    if event.key == pygame.K_7:
+                         current_color = CMap.purple
+
+                    
 
             window.fill(CMap.white)
+            pygame.draw.rect(window, current_color, pygame.Rect( (0,0),(20,20)))
             if (draw_start_box):
                 pygame.draw.rect(window, CMap.red, pygame.Rect(pos, \
                    (mouse_pos[0]-pos[0], mouse_pos[1]-pos[1])))
 
             for item in to_draw:
-                pygame.draw.rect(window, CMap.black, item)
+                if len(item) >1:
+                    pygame.draw.rect(window, item[1], item[0])
 
             if self.data['playerstart']:
                 window.blit( self.images.getImage('standing'), \
