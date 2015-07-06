@@ -14,30 +14,40 @@ class TextSprite(pygame.sprite.Sprite):
         pass
 
 class Feedback(TextSprite):
+    def __init__(self, text="", x=50, y=50, width=500, height=232):
+        super(Feedback, self).__init__(text)
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
-    def setText(self, text):
+    def setText(self, raw_text):
         if not self.open_flag:
             self.image = pygame.Surface((0,0))
             self.rect = ((0,0),(0,0))
         else:
-            box = pygame.Surface((400,132))
-            text = self.font.render(text, 1, (0, 0, 0))
-            textpos = text.get_rect()
-            textpos.centery = box.get_rect().centery
-            textpos.centerx += 20
+            texts = list(raw_text.split("\n"))
+            box = pygame.Surface((self.width,self.height))
             box.fill(white)
-            box.blit(text, textpos)
-            pygame.draw.rect(box,CMap.blue,(0,0,400,132),2)
+            for i in range(len(texts)):
+                text = self.font.render(texts[i], 1, (0, 0, 0))
+                textpos = text.get_rect()
+                textpos.centery = box.get_rect().centery + 30 * i
+                textpos.centerx += 20
+                box.blit(text, textpos)
+            pygame.draw.rect(box,CMap.blue,(0, 0, self.width, self.height),2)
             pygame.draw.rect(box, CMap.red, (5, 5, 20, 20))
             self.image = box
-            self.rect = ((44,50),(400,32))
+            self.rect = ((self.x, self.y),(self.width, self.height))
 
     def evaluatePos(self, pos):
-        x = pos[0] - 44
-        y = pos[1] - 50
-        if x < 0 or y < 0 or x > 400 or y > 132:
+        x = pos[0] - self.x
+        y = pos[1] - self.y
+        if (x < 0 or y < 0 or
+            x > self.width or
+            y > self.height):
             return
-        our_pos = (pos[0]-44 ,pos[1] -50)
+        our_pos = (pos[0]-self.x ,pos[1] -self.y)
         # self.setText("position is = %s" % str(our_pos))
         if our_pos[0] > 5 and our_pos[0] < 25 and our_pos[1] > 5 and our_pos[1] < 25:
             self.image = pygame.Surface((0,0))
@@ -68,7 +78,7 @@ if  __name__ == "__main__":
 
     clock = pygame.time.Clock()
     fps = 30
-    feedback = Feedback("Hello Screen")
+    feedback = Feedback("Hello Screen\nTest",10,50,300,200)
 
     pygame.display.update()
     running = True
@@ -87,7 +97,7 @@ if  __name__ == "__main__":
         window.blit(test, (30, 50),rect2)
         window.blit(feedback.image,feedback.rect)
 
-        feedback.setText("simple test")
+        feedback.setText("1. First option.\n2. Second option\n3. Third option.")
         clock.tick(fps)
         pygame.display.update()
 
