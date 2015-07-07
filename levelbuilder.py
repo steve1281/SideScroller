@@ -5,7 +5,7 @@ import sys
 import getopt
 import json
 from imagefactory import ImageFactory
-
+from dialog import Feedback
 from colors import CMap
 
 
@@ -86,7 +86,7 @@ class LevelBuilder:
             to_draw.append((pygame.Rect((r[0],r[1]),(r[2], r[3])), (CMap()).decode(r[4])))
 
         pygame.init()
-
+        feedback = Feedback("Simple test/n/nHello ThereZ",50,50,500,500)
         size = width, height = 1200, 1000
         window = pygame.display.set_mode(size)
         clock = pygame.time.Clock()
@@ -99,16 +99,21 @@ class LevelBuilder:
         running = True
         while running:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT or \
+                if event.type == pygame.MOUSEBUTTONDOWN and feedback.open_flag:
+                    event = None
+                elif event.type == pygame.MOUSEBUTTONUP and feedback.open_flag:
+                    feedback.evaluatePos(pygame.mouse.get_pos())
+                    event = None
+
+                elif event.type == pygame.QUIT or \
                    event.type == pygame.KEYDOWN and \
                    event.key == pygame.K_ESCAPE:
                     running = False
                 elif (event.type == pygame.MOUSEMOTION):
                     mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 3:
-                        self.data['playerstart'] = pygame.mouse.get_pos()
-                        event = None
+                    if feedback.open_flag:
+                        feedback.evaluatePos(mouse_pos)
                     else:
                         rpos = mouse_pos
                         sx = math.floor(rpos[0]/10)*10
@@ -126,9 +131,9 @@ class LevelBuilder:
                                 pygame.draw.rect(window, col, item)
                                 draw_start_box = True
                 elif event.type == pygame.MOUSEBUTTONUP:
-	            if event.button == 3:
-		        event = None
-		    else:
+                    if event.button == 3:
+		                event = None
+                    else:
                         rpos = mouse_pos
                         sx = math.floor(rpos[0]/10)*10
                         sy = math.floor(rpos[1]/10)*10
@@ -184,7 +189,8 @@ class LevelBuilder:
                          current_color = CMap.yellow
                     if event.key == pygame.K_7:
                          current_color = CMap.purple
-
+                    if event.key == pygame.K_h:
+                         feedback.openDialog()
                     
 
             window.fill(CMap.white)
@@ -212,6 +218,8 @@ class LevelBuilder:
             if self.data['cat']:
                 window.blit( self.images.getImage('cat'), \
                     (self.data['cat'][0] -30, self.data['cat'][1] -25))
+            if feedback:
+                window.blit(feedback.image, feedback.rect)
 
             pygame.display.update()
             clock.tick(fps)

@@ -2,7 +2,7 @@
 
 import pygame
 from colors import CMap
-from Dialog import Feedback
+from dialog import Feedback
 
 if  __name__ == "__main__":
     pygame.init()
