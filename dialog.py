@@ -1,10 +1,11 @@
+import pygame
 from colors import CMap
 
 
 class Feedback(pygame.sprite.Sprite):
     def __init__(self, text="", x=50, y=50, w=500, h=232):
         pygame.sprite.Sprite.__init__(self)
-        self.open_flag = True
+        self.open_flag = False
         self.font = pygame.font.Font(None, 36)
         self.x = x
         self.y = y
